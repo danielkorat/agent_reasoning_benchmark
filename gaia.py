@@ -10,7 +10,7 @@ OUTPUT_DIR = "output_gaia"
 from huggingface_hub import login
 import os
 
-login(os.getenv("HUGGINGFACEHUB_API_TOKEN"))
+# login(os.getenv("HUGGINGFACEHUB_API_TOKEN"))
 
 from scripts.web_surfer import (
     SearchInformationTool,
@@ -39,7 +39,7 @@ import asyncio
 
 ### IMPORTANT: EVALUATION SWITCHES
 
-USE_OS_MODELS = False
+USE_OS_MODELS = True
 USE_JSON_AGENT = False
 
 ### BUILD LLM ENGINES
@@ -67,13 +67,14 @@ class OpenAIModel:
         return response.choices[0].message.content
 
 
-oai_llm_engine = OpenAIModel()
+if not USE_OS_MODELS:
+    oai_llm_engine = OpenAIModel()
 hf_llm_engine = HfEngine(model="meta-llama/Meta-Llama-3-70B-Instruct")
 
 
 ### LOAD EVALUATION DATASET
 
-eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")["validation"]
+eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")["validation"].select(range(3))
 eval_ds = eval_ds.rename_columns(
     {"Question": "question", "Final answer": "true_answer", "Level": "task"}
 )
