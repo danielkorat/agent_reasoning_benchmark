@@ -67,13 +67,14 @@ class OpenAIModel:
 if not USE_OS_MODELS:
     oai_llm_engine = OpenAIModel()
 
-url_llama3 = "meta-llama/Meta-Llama-3-70B-Instruct"
-url_qwen2 = "https://azbwihkodyacoe54.us-east-1.aws.endpoints.huggingface.cloud"
-url_command_r = "CohereForAI/c4ai-command-r-plus"
+# url_llama3 = "meta-llama/Meta-Llama-3-70B-Instruct"
+url_llama3_local = "http://127.0.0.1:8087"
+# url_qwen2 = "https://azbwihkodyacoe54.us-east-1.aws.endpoints.huggingface.cloud"
+# url_command_r = "CohereForAI/c4ai-command-r-plus"
 
 ### LOAD EVALUATION DATASET
 
-eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")[SET]
+eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")[SET].select(range(1))
 eval_ds = eval_ds.rename_columns(
     {"Question": "question", "Final answer": "true_answer", "Level": "task"}
 )
@@ -93,7 +94,7 @@ print(pd.Series(eval_ds["task"]).value_counts())
 
 
 websurfer_llm_engine = HfEngine(
-    model=url_qwen2,
+    model=url_llama3_local,
 )  # chosen for its high context length
 
 # Replace with OAI if needed
@@ -256,7 +257,7 @@ TASK_SOLVING_TOOLBOX = [
 if USE_JSON:
     TASK_SOLVING_TOOLBOX.append(PythonInterpreterTool())
 
-hf_llm_engine = HfEngine(model=url_qwen2)
+hf_llm_engine = HfEngine(model=url_llama3_local)
 
 llm_engine = hf_llm_engine if USE_OS_MODELS else oai_llm_engine
 
