@@ -7,19 +7,11 @@ import pandas as pd
 from dotenv import load_dotenv
 import datasets
 from huggingface_hub import login
-<<<<<<< HEAD
-import os
-
-# login(os.getenv("HUGGINGFACEHUB_API_TOKEN"))
-
-from scripts.web_surfer import (
-=======
 from transformers.agents.llm_engine import MessageRole, get_clean_message_list
 from transformers.agents import ReactCodeAgent, ReactJsonAgent, HfEngine
 from transformers.agents.prompts import DEFAULT_REACT_CODE_SYSTEM_PROMPT, DEFAULT_REACT_JSON_SYSTEM_PROMPT
 from transformers.agents.default_tools import Tool, PythonInterpreterTool
 from scripts.tools.web_surfer import (
->>>>>>> 767ecb630d0c2d0507c8a26d0c8430546a27fe40
     SearchInformationTool,
     NavigationalSearchTool,
     VisitTool,
@@ -35,22 +27,17 @@ from scripts.run_agents import answer_questions
 from scripts.tools.visual_qa import VisualQATool, VisualQAGPT4Tool
 
 load_dotenv(override=True)
-login(os.getenv("HUGGINGFACEHUB_API_TOKEN"))
+# login(os.getenv("HUGGINGFACEHUB_API_TOKEN"))
 
 ### IMPORTANT: EVALUATION SWITCHES
 
-<<<<<<< HEAD
-USE_OS_MODELS = True
-USE_JSON_AGENT = False
-=======
 print("Make sure you deactivated Tailsacale VPN, else some URLs will be blocked!")
 
 OUTPUT_DIR = "output_gaia"
-USE_OS_MODELS = False
+USE_OS_MODELS = True
 USE_JSON = False
 
 SET = "validation"
->>>>>>> 767ecb630d0c2d0507c8a26d0c8430546a27fe40
 
 ### BUILD LLM ENGINES
 
@@ -77,14 +64,8 @@ class OpenAIModel:
         )
         return response.choices[0].message.content
 
-
-<<<<<<< HEAD
 if not USE_OS_MODELS:
     oai_llm_engine = OpenAIModel()
-hf_llm_engine = HfEngine(model="meta-llama/Meta-Llama-3-70B-Instruct")
-=======
-oai_llm_engine = OpenAIModel()
->>>>>>> 767ecb630d0c2d0507c8a26d0c8430546a27fe40
 
 url_llama3 = "meta-llama/Meta-Llama-3-70B-Instruct"
 url_qwen2 = "https://azbwihkodyacoe54.us-east-1.aws.endpoints.huggingface.cloud"
@@ -92,11 +73,7 @@ url_command_r = "CohereForAI/c4ai-command-r-plus"
 
 ### LOAD EVALUATION DATASET
 
-<<<<<<< HEAD
-eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")["validation"].select(range(3))
-=======
 eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")[SET]
->>>>>>> 767ecb630d0c2d0507c8a26d0c8430546a27fe40
 eval_ds = eval_ds.rename_columns(
     {"Question": "question", "Final answer": "true_answer", "Level": "task"}
 )
