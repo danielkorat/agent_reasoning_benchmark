@@ -69,12 +69,12 @@ if not USE_OS_MODELS:
 
 # url_llama3 = "meta-llama/Meta-Llama-3-70B-Instruct"
 url_llama3_local = "http://127.0.0.1:8087"
-# url_qwen2 = "https://azbwihkodyacoe54.us-east-1.aws.endpoints.huggingface.cloud"
+# url_qwen2 = "Qwen/Qwen2-72B-Instruct"
 # url_command_r = "CohereForAI/c4ai-command-r-plus"
 
 ### LOAD EVALUATION DATASET
 
-eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")[SET].select(range(1))
+eval_ds = datasets.load_dataset("gaia-benchmark/GAIA", "2023_all")[SET].select(range(6, 7))
 eval_ds = eval_ds.rename_columns(
     {"Question": "question", "Final answer": "true_answer", "Level": "task"}
 )
@@ -184,7 +184,7 @@ This tool handles the following file extensions: [".html", ".htm", ".xlsx", ".pp
 surfer_agent = ReactJsonAgent(
     llm_engine=websurfer_llm_engine,
     tools=WEB_TOOLS,
-    max_iterations=14,
+    max_iterations=2, # max_iterations=14,
     verbose=2,
     system_prompt=DEFAULT_REACT_JSON_SYSTEM_PROMPT + "\nAdditionally, if after some searching you find out that you need more information to answer the question, you can use `final_answer` with your request for clarification as argument to request for more information.",
     planning_interval=4,
@@ -264,7 +264,7 @@ llm_engine = hf_llm_engine if USE_OS_MODELS else oai_llm_engine
 react_agent = ReactCodeAgent(
     llm_engine=llm_engine,
     tools=TASK_SOLVING_TOOLBOX,
-    max_iterations=10,
+    max_iterations=2, # max_iterations=10,
     verbose=0,
     memory_verbose=True,
     system_prompt=DEFAULT_REACT_CODE_SYSTEM_PROMPT,
@@ -276,7 +276,7 @@ if USE_JSON:
     react_agent = ReactJsonAgent(
         llm_engine=llm_engine,
         tools=TASK_SOLVING_TOOLBOX,
-        max_iterations=12,
+        max_iterations=2,
         verbose=0,
         memory_verbose=True,
         system_prompt=DEFAULT_REACT_JSON_SYSTEM_PROMPT,
